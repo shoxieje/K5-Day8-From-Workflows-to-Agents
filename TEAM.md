@@ -28,7 +28,7 @@ Gợi ý chia vai:
 
 | Người | Vai | Commit | Test đã thêm hoặc sửa |
 | --- | --- | --- | --- |
-| Nguyễn Ngọc Quang (shoxieje) | Nhóm trưởng: integration, review + merge | `6aba155` fix(orchestrator): never raise from run_claim, flush trace on crash, use claim view; `4375615` fix(single): run_claim returns failed instead of raising on post-loop errors | Không thêm file test riêng; kiểm mỗi PR bằng `python -m pytest -q` (157 passed) và `tests/test_public_matrix.py -m student` (248 passed, cả 4 shape) |
+| Nguyễn Ngọc Quang (shoxieje) | Nhóm trưởng: integration, review + merge | `6aba155` fix(orchestrator): never raise from run_claim, flush trace on crash, use claim view; `4375615` fix(single): run_claim returns failed instead of raising on post-loop errors | `src/tests/test_single_shape.py::test_db_error_returns_failed_instead_of_raising` (thêm trong `4375615`); kiểm mỗi PR bằng `python -m pytest -q` (157 passed) và ma trận student (248 passed, cả 4 shape) |
 | Vũ Tuấn Đạt | Workflow (shape A) | `1a607d2` — Implement workflow shape (A) and add workflow tests | `src/tests/test_workflow_shape.py` (6 test, 10 case) |
 | Trần Tuấn Anh (Tanh0406) | Single agent (shape B) | `94bc560` feat(single): implement shape B ReAct agent with read-only tools | `src/tests/test_single_shape.py` (thêm mới, 36 test) |
 | Vũ Văn Chu (chuvv) | Ledger + evaluation | `132507f` — test(ledger-eval): verify refund durability and publish public evaluation evidence | `src/tests/test_ledger_evaluation.py` (35 trường hợp), `src/tests/test_evaluation.py` (11 trường hợp) |
@@ -54,6 +54,7 @@ Gợi ý chia vai:
 
 - PR #4 `fix(orchestrator): follow-up fixes from PR #3 review`; merge commit của PR #1–#6 trên `main`.
 - Trong `src/`: `python -m pytest -q` → 157 passed; `python -m lab8.check_submission` → 0 FAIL, 0 WARN.
+- Báo cáo cá nhân: `report/team/2A202603773_NguyenNgocQuang.md`.
 
 ## Trần Tuấn Anh (Tanh0406)
 
