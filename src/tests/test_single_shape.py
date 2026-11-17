@@ -109,3 +109,20 @@ def test_single_passes_full_quote_on_partially_refunded_order(tmp_path):
     assert result.status == "resolved"
     assert result.proposal_amount == 150000
     assert result.refund_effects[0]["amount_vnd"] == 120000
+
+
+def test_db_error_returns_failed_instead_of_raising(tmp_path: Path) -> None:
+    """Contract: run_claim never raises. A locked store must give status=failed."""
+    import sqlite3
+
+    store = _store(tmp_path, "locked.sqlite")
+    holder = sqlite3.connect(str(store), timeout=0)
+    holder.execute("BEGIN IMMEDIATE")
+    try:
+        result = run_claim("C-001", seed=11, store_path=str(store))
+    finally:
+        holder.rollback()
+        holder.close()
+    assert result.status == "failed"
+    assert (result.error_reason or "").startswith("exception:")
+    assert _ledger_count(store, "C-001") == 0

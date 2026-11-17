@@ -92,34 +92,41 @@ def _run(conn: sqlite3.Connection, claim_id: str, *, seed: int, crash_at: str | 
         trace.add("error", {"reason": type(exc).__name__})
         return done("failed", 0, f"react_error:{type(exc).__name__}")
 
-    trace.add("react_stop", {"stopped": loop["stopped"]})
-    final = loop["final"]
-    status = final.get("status", "failed")
-    reason = final.get("error_reason")
-
-    if status != "quote":
-        # needs_info / escalated / failed decided inside the loop. No ledger write.
-        complete(budget, seed=seed, purpose="draft", prompt=status)
-        return done(status, 0, reason)
-
-    proposal = int(final["amount_vnd"])
-    complete(budget, seed=seed, purpose="draft", prompt=f"proposal={proposal}")
-    if proposal <= 0:
-        # Quote 0 -> denied, do not call issue_refund (no policy_denied expected).
-        return done("denied", 0, reason)
-
-    # Host is the only writer. Full quote; host subtracts earlier refunds on the order.
+    proposal = 0
     try:
-        outcome = issue_refund(conn, claim_id, proposal, crash_at=crash_at)
-    except InjectedCrash:
-        trace.add("crash", {"at": crash_at})
-        trace.write()
-        raise
+        trace.add("react_stop", {"stopped": loop["stopped"]})
+        final = loop["final"]
+        status = final.get("status", "failed")
+        reason = final.get("error_reason")
 
-    trace.add("issue_refund", {"ok": outcome["ok"], "reason": outcome["reason"], "conflict": outcome["conflict"]})
-    if not outcome["ok"]:
-        return done("failed" if outcome["conflict"] else "denied", proposal, outcome["reason"])
-    return done("resolved", proposal, None)
+        if status != "quote":
+            # needs_info / escalated / failed decided inside the loop. No ledger write.
+            complete(budget, seed=seed, purpose="draft", prompt=status)
+            return done(status, 0, reason)
+
+        proposal = int(final["amount_vnd"])
+        complete(budget, seed=seed, purpose="draft", prompt=f"proposal={proposal}")
+        if proposal <= 0:
+            # Quote 0 -> denied, do not call issue_refund (no policy_denied expected).
+            return done("denied", 0, reason)
+
+        # Host is the only writer. Full quote; host subtracts earlier refunds on the order.
+        try:
+            outcome = issue_refund(conn, claim_id, proposal, crash_at=crash_at)
+        except InjectedCrash:
+            trace.add("crash", {"at": crash_at})
+            trace.write()
+            raise
+
+        trace.add("issue_refund", {"ok": outcome["ok"], "reason": outcome["reason"], "conflict": outcome["conflict"]})
+        if not outcome["ok"]:
+            return done("failed" if outcome["conflict"] else "denied", proposal, outcome["reason"])
+        return done("resolved", proposal, None)
+    except InjectedCrash:
+        raise
+    except Exception as exc:  # run_claim must not raise; record the type only, no payload.
+        trace.add("error", {"reason": type(exc).__name__})
+        return done("failed", proposal, f"exception:{type(exc).__name__}")
 
 
 def _make_decider(budget: Budget, seed: int, claim_id: str, trace: Trace):
