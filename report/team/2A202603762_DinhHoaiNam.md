@@ -14,7 +14,7 @@
 
 ## 3. Đóng góp cụ thể
 
-- **Commit chính:** `7f91bc6` — *feat(lab8): implement Shape C orchestrator with read-only investigators* (1 file, +193 / −6).
+- **Commit chính:** `3d9f899` — *feat(lab8): implement Shape C orchestrator with read-only investigators* (1 file, +193 / −6).
 - **Quyết định kỹ thuật:**
   - **Handoff theo allowlist, không dùng tóm tắt của LLM làm bộ lọc.** Gọi `make_handoff` với `facts={}` và chỉ các tool read-only (`lookup_order`, `lookup_policy`, `lookup_refund_history`, `compute_compensation`). Không đưa `parent_secret`, raw headers hay full claim row vào facts; orchestrator tự đọc claim row rồi **không** forward thô.
   - **Trust order row, không trust số trong ticket.** Quote lấy từ `compute_compensation` trên order view của investigator → tránh đúng điểm yếu `REFERENCE_WEAKNESS` của swarm (seed % 5 tin delay trong ticket).
@@ -25,7 +25,7 @@
 
 ## 4. Bằng chứng
 
-- **Commit:** https://github.com/shoxieje/K5-Day8-From-Workflows-to-Agents/commit/7f91bc6
+- **Commit:** https://github.com/shoxieje/K5-Day8-From-Workflows-to-Agents/commit/3d9f899
 - **Test chạy qua (62/62):** `src/tests/test_public_matrix.py` — `test_public_single_run_cases[*-orchestrator]` (T01–T10, T13, T14 × seed 11/22/33/44/55), `test_t11_retry_keeps_one_refund[orchestrator]`, `test_t12_crash_before_checkpoint_does_not_double_pay[orchestrator]`.
 - **Lệnh đã chạy:**
   ```bash
