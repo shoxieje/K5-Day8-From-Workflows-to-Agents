@@ -100,7 +100,7 @@ Gợi ý chia vai:
 - Crash C-012 `after_effect_before_checkpoint` rồi resume (`R-workflow-C-012-s11`) → 1 dòng ledger 35.000, 1 audit `refund_committed`.
 - Báo cáo cá nhân: `report/team/2A202603744_VuTuanDat.md`.
 
-## Vũ Văn Chu (chuvv)
+## Vũ Văn Chủ (chur04)
 
 ### Phần việc phụ trách
 
