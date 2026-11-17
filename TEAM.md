@@ -5,7 +5,7 @@
 - Tên nhóm: Nhóm101
 - Lớp: L3B
 - Repo nhóm: `K5-L3B-DAY08-Nhom101-FromWorkflowsToAgents` (xem [SUBMISSION.md](SUBMISSION.md))
-- URL repo, nhánh nộp, commit chốt:
+- URL repo, nhánh nộp, commit chốt: https://github.com/shoxieje/K5-L3B-DAY08-Nhom101-FromWorkflowsToAgents, `main`, `77c2fbe`
 
 ## Thành viên
 
