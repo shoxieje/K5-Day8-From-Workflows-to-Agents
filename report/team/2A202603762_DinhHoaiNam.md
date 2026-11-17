@@ -21,7 +21,7 @@
   - **Host là writer duy nhất, truyền full quote.** Gọi `issue_refund` với nguyên quote; host tự trừ refund cũ cùng order và cưỡng chế approval/ownership/idempotency.
   - **CP3 — crash safety.** Truyền thẳng `crash_at` vào `issue_refund` và **không** bắt `InjectedCrash` để resume replay an toàn.
   - **Trace contract v1.** Ghi handoff đã sanitize + các mốc quyết định, trả `trace_path` trên **mọi** return path (unknown_claim / needs_info / escalated / denied / resolved).
-- **Test:** không thêm file test mới; kiểm chứng bằng bộ test chính thức có sẵn của repo (`src/tests/test_public_matrix.py`, marker `student`) chạy riêng cho orchestrator.
+- **Test:** thêm `src/tests/test_orchestrator_shape.py` (6 test / 10 case: bỏ qua số ngày khai sai ở 5 seed, không lấy mã đơn từ ticket, handoff sanitize theo allowlist, quét leak trong trace khi escalate, claim không tồn tại fail-closed, crash `before_effect` rồi resume chỉ một refund); đồng thời kiểm chứng bằng bộ test chính thức `src/tests/test_public_matrix.py` (marker `student`).
 
 ## 4. Bằng chứng
 

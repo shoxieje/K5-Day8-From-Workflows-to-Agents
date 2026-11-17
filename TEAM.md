@@ -14,6 +14,7 @@
 |   1 | Trần Tuấn Anh | 2A202603909 | 275679340+Tanh0406@users.noreply.github.com | Tanh0406 | Single agent (shape B) |
 |   2 | Vũ Tuấn Đạt | 2A202603744 | 26ai.datvt@vinuni.edu.vn | datkunal | Workflow (shape A) |
 |   3 | Vũ Văn Chu | 2A202603873 | 26ai.chuvv@vinuni.edu.vn | chur04 | Ledger + evaluation (CP3–CP5) |
+|   4 | Đinh Hoài Nam | 2A202603762 | hoainam.dnu@gmai.com | hoainamdnu-arch | Orchestrator + handoff |
 
 Gợi ý chia vai:
 
@@ -29,6 +30,7 @@ Gợi ý chia vai:
 | Vũ Tuấn Đạt | Workflow (shape A) | `1a607d2` — Implement workflow shape (A) and add workflow tests | `src/tests/test_workflow_shape.py` (6 test, 10 case) |
 | Trần Tuấn Anh (Tanh0406) | Single agent (shape B) | `94bc560` feat(single): implement shape B ReAct agent with read-only tools | `src/tests/test_single_shape.py` (thêm mới, 36 test) |
 | Vũ Văn Chu (chuvv) | Ledger + evaluation | `132507f` — test(ledger-eval): verify refund durability and publish public evaluation evidence | `src/tests/test_ledger_evaluation.py` (35 trường hợp), `src/tests/test_evaluation.py` (11 trường hợp) |
+| Đinh Hoài Nam (hoainamdnu-arch) | Orchestrator + handoff (shape C) | `3d9f899` feat(lab8): implement Shape C orchestrator with read-only investigators | `src/tests/test_orchestrator_shape.py` (thêm mới, 6 test / 10 case) |
 
 ## Cá nhân
 
@@ -111,3 +113,26 @@ Sao chép mục dưới đây cho từng thành viên.
 - `src/reports/safety.json`: 280 trial public, 0 secret leak, 0 PII leak, 0 approval bypass, 0 invalid trace, 0 unexpected ledger, 0 exception.
 - `src/reports/evaluation_ablation.json`: bỏ riêng draft call của workflow vẫn 70/70; cost/success từ 28,77 xuống 27,857143 VND mô phỏng.
 - Chưa có `student_drop/`; chưa báo pass rate hidden hay kết quả chấm chính thức.
+
+## Đinh Hoài Nam 
+
+### Phần việc phụ trách
+
+- Shape C `orchestrator`: `src/lab8/shapes/orchestrator.py` (orchestrator điều phối + các investigator chỉ-đọc) và handoff đã sanitize.
+
+### Đóng góp cụ thể
+
+- Dựng handoff bằng `make_handoff` theo allowlist: `facts={}`, chỉ các tool đọc (`lookup_order`, `lookup_policy`, `lookup_refund_history`, `compute_compensation`); không đưa `parent_secret`, header hay full claim row vào facts — orchestrator tự đọc claim row rồi không forward thô (tóm tắt của LLM không thay được allowlist).
+- Số ngày trễ và số tiền lấy từ order view đã allowlist của investigator (`compute_compensation`), không tin số trong ticket — tránh đúng điểm yếu `REFERENCE_WEAKNESS` của swarm (T02 đúng ở cả seed 55).
+- Host là writer duy nhất: truyền quote đầy đủ vào `durability.issue_refund` để host tự trừ phần đã hoàn theo đơn và cưỡng chế approval/ownership/idempotency (T13, T14).
+- Truyền `crash_at`, không bắt `InjectedCrash` để resume replay an toàn (T11, T12 xanh).
+- Trace chỉ ghi handoff đã sanitize, order view đã allowlist, refund_history, quote và kết quả host; trả `trace_path` trên mọi return path (unknown_claim / needs_info / escalated / denied / resolved); không ghi ticket, `principal_id`, `parent_secret`, header.
+- Thêm `src/tests/test_orchestrator_shape.py`: bỏ qua số ngày khai sai trong ticket ở 5 seed, không lấy mã đơn từ ticket, handoff sanitize theo allowlist (chỉ tool đọc, facts rỗng, không rò secret/header/ticket), quét leak trong trace khi escalate, claim không tồn tại fail-closed, crash `before_effect` rồi resume chỉ một refund.
+- Kiểm chứng thêm bằng bộ test chuẩn `src/tests/test_public_matrix.py` (marker `student`) cho orchestrator → 62/62 case xanh (T01–T14).
+
+### Bằng chứng
+
+- Commit `3d9f899` (Shape C) và `8273dbf` (báo cáo cá nhân) trên branch `dinhhoainam`, merge vào `main` qua PR #3.
+- `python -m pytest -q -m student -o addopts= tests/test_public_matrix.py -k orchestrator` → 62 passed.
+- Crash C-012 `after_effect_before_checkpoint` rồi resume (`R-orchestrator-C-012-s11`) → 1 dòng ledger, 1 audit `refund_committed` (không trả trùng).
+- Báo cáo cá nhân: `report/team/2A202603762_DinhHoaiNam.md`.
