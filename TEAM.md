@@ -2,19 +2,20 @@
 
 ## Thông tin nhóm
 
-- Tên nhóm:
-- Lớp: L3A
-- Repo nhóm: `K5-L3A-DAY08-TenNhom-FromWorkflowsToAgents` (xem [SUBMISSION.md](SUBMISSION.md))
+- Tên nhóm: Nhóm101
+- Lớp: L3B
+- Repo nhóm: `K5-L3B-DAY08-Nhom101-FromWorkflowsToAgents` (xem [SUBMISSION.md](SUBMISSION.md))
 - URL repo, nhánh nộp, commit chốt:
 
 ## Thành viên
 
 | STT | Họ tên | MSSV | Email | GitHub | Vai trò |
 | --: | ------ | ---- | ----- | ------ | ------- |
-|   1 | Trần Tuấn Anh | 2A202603909 | 275679340+Tanh0406@users.noreply.github.com | Tanh0406 | Single agent (shape B) |
-|   2 | Vũ Tuấn Đạt | 2A202603744 | 26ai.datvt@vinuni.edu.vn | datkunal | Workflow (shape A) |
-|   3 | Vũ Văn Chu | 2A202603873 | 26ai.chuvv@vinuni.edu.vn | chur04 | Ledger + evaluation (CP3–CP5) |
-|   4 | Đinh Hoài Nam | 2A202603762 | hoainam.dnu@gmai.com | hoainamdnu-arch | Orchestrator + handoff |
+|   1 | Nguyễn Ngọc Quang | 2A202603773 | 26ai.quangnn3@vinuni.edu.vn | shoxieje | Nhóm trưởng: integration, review + merge PR |
+|   2 | Trần Tuấn Anh | 2A202603909 | 275679340+Tanh0406@users.noreply.github.com | Tanh0406 | Single agent (shape B) |
+|   3 | Vũ Tuấn Đạt | 2A202603744 | 26ai.datvt@vinuni.edu.vn | datkunal | Workflow (shape A) |
+|   4 | Vũ Văn Chu | 2A202603873 | 26ai.chuvv@vinuni.edu.vn | chur04 | Ledger + evaluation (CP3–CP5) |
+|   5 | Đinh Hoài Nam | 2A202603762 | hoainam.dnu@gmai.com | hoainamdnu-arch | Orchestrator + handoff |
 
 Gợi ý chia vai:
 
@@ -27,6 +28,7 @@ Gợi ý chia vai:
 
 | Người | Vai | Commit | Test đã thêm hoặc sửa |
 | --- | --- | --- | --- |
+| Nguyễn Ngọc Quang (shoxieje) | Nhóm trưởng: integration, review + merge | `6aba155` fix(orchestrator): never raise from run_claim, flush trace on crash, use claim view; `4375615` fix(single): run_claim returns failed instead of raising on post-loop errors | Không thêm file test riêng; kiểm mỗi PR bằng `python -m pytest -q` (157 passed) và `tests/test_public_matrix.py -m student` (248 passed, cả 4 shape) |
 | Vũ Tuấn Đạt | Workflow (shape A) | `1a607d2` — Implement workflow shape (A) and add workflow tests | `src/tests/test_workflow_shape.py` (6 test, 10 case) |
 | Trần Tuấn Anh (Tanh0406) | Single agent (shape B) | `94bc560` feat(single): implement shape B ReAct agent with read-only tools | `src/tests/test_single_shape.py` (thêm mới, 36 test) |
 | Vũ Văn Chu (chuvv) | Ledger + evaluation | `132507f` — test(ledger-eval): verify refund durability and publish public evaluation evidence | `src/tests/test_ledger_evaluation.py` (35 trường hợp), `src/tests/test_evaluation.py` (11 trường hợp) |
@@ -34,15 +36,24 @@ Gợi ý chia vai:
 
 ## Cá nhân
 
-Mỗi thành viên đồng thời tạo một báo cáo riêng trong `report/` theo dạng:
+## Nguyễn Ngọc Quang (shoxieje)
 
-```text
-report/team/MSSV_HoTen.md
-```
+### Phần việc phụ trách
 
-Ví dụ: `report/team/20241234_NguyenVanAn.md`.
+- Nhóm trưởng: tạo và quản lý repo nhóm, review và merge toàn bộ PR (#1–#6), tích hợp ba shape, giải quyết xung đột merge, chốt bài nộp.
 
-Sao chép mục dưới đây cho từng thành viên.
+### Đóng góp cụ thể
+
+- Review từng PR theo issue, `RULES.md` và `docs/contracts.md`; chạy lại test trước khi merge.
+- Sửa shape single (`4375615`): `run_claim` trả `failed` thay vì ném exception khi lỗi sau vòng lặp.
+- Sửa shape orchestrator sau review PR #3 (`6aba155`, PR #4): bắt mọi lỗi khác `InjectedCrash` và trả `failed` kèm `exception:<Type>`; ghi trace trước khi ném lại `InjectedCrash`; bỏ lớp `Trace` bọc thừa; đọc claim qua `get_claim_view`.
+- Giải quyết xung đột `TEAM.md` khi merge (`09ac71c`, `b8511e1`), giữ đủ dòng của mọi thành viên.
+- Sửa commit hash sai trong báo cáo cá nhân của Đinh Hoài Nam (`fb67388`); cập nhật tên repo, lớp L3B và commit chốt.
+
+### Bằng chứng
+
+- PR #4 `fix(orchestrator): follow-up fixes from PR #3 review`; merge commit của PR #1–#6 trên `main`.
+- Trong `src/`: `python -m pytest -q` → 157 passed; `python -m lab8.check_submission` → 0 FAIL, 0 WARN.
 
 ## Trần Tuấn Anh (Tanh0406)
 

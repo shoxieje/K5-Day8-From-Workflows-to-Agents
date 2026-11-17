@@ -56,7 +56,7 @@ Thang 100 điểm và bonus: [RUBRIC.md](RUBRIC.md).
 
 ## Bắt đầu
 
-**Bước 0 — tạo repo nhóm.** Nhóm trưởng fork repo này rồi đổi tên theo mẫu `K5-L3A-DAY08-TenNhom-FromWorkflowsToAgents`. Không fork được thì làm theo [SUBMISSION.md](SUBMISSION.md#tạo-repo-nhóm). Các thành viên clone **repo nhóm**, không làm trên repo đề bài.
+**Bước 0 — tạo repo nhóm.** Nhóm trưởng fork repo này rồi đổi tên theo mẫu `K5-L3B-DAY08-TenNhom-FromWorkflowsToAgents`. Không fork được thì làm theo [SUBMISSION.md](SUBMISSION.md#tạo-repo-nhóm). Các thành viên clone **repo nhóm**, không làm trên repo đề bài.
 
 **Bước 1 — cài và chạy thử.** Cần Python 3.11–3.13. **Mọi lệnh chạy trong thư mục `src/`.**
 

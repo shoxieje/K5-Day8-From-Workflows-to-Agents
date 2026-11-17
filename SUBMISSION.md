@@ -7,12 +7,12 @@
 ## Tên repo và biến tên
 
 - `Kn`: số khóa. Khóa này dùng `K5`.
-- Level/lớp: `L3A`.
+- Level/lớp: `L3B`.
 
 ### Repo bài nộp nhóm
 
 ```text
-K5-L3A-DAY08-TenNhom-FromWorkflowsToAgents
+K5-L3B-DAY08-TenNhom-FromWorkflowsToAgents
 ```
 
 `TenNhom` viết không dấu, không khoảng trắng. Repo phải public, hoặc đã mời giảng viên vào.
@@ -74,7 +74,7 @@ Chạy trong `src/`:
 
 ## Checklist
 
-- [ ] Đổi tên repo theo đúng quy ước `K5-L3A-DAY08-…`.
+- [ ] Đổi tên repo theo đúng quy ước `K5-L3B-DAY08-…`.
 - [ ] Điền `TEAM.md` ở root: thông tin nhóm, thành viên, bảng đóng góp.
 - [ ] Mỗi thành viên có file báo cáo đã đổi tên đúng định dạng `report/team/MSSV_HoTen.md`.
 - [ ] `report/team/group_report.md`, `decision_adr.md`, `research_card.md` đã điền đủ.
